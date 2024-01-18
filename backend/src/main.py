@@ -73,7 +73,7 @@ def list_videos(page: int = 0, session: Session = Depends(db_session)):
 def get_video(id: int, session: Session = Depends(db_session)):
     statement = select(Video).where(Video.id == id)
     video = session.exec(statement).one()
-    return {"data": str(video.video)}
+    return Response(video.video, media_type="video/ogg")
 
 @app.get("/thumbnail/{id}")
 def get_thumbnail(id: int, session: Session = Depends(db_session)):
