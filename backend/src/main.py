@@ -1,11 +1,24 @@
 from typing import Optional, Annotated
 from fastapi import FastAPI, Depends, Form, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, select, Field, Session
 from .database import engine, db_session
 
 PAGE_SIZE = 20
 
+origins = [
+    "http://localhost"
+]
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 
 class Video(SQLModel, table=True):
