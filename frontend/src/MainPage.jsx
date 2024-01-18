@@ -14,6 +14,6 @@ export default function MainPage() {
     }, [])
 
     return <>
-        {(list || []).map((data) => <VideoCard name={data.name} desc={data.desc} /> )}
+        {(list || []).map((data) => <VideoCard id={data.id} name={data.name} /> )}
     </>
 }

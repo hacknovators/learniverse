@@ -1,12 +1,12 @@
 function Object() {
     return (
-        <div class="card">
+        <div className="card">
           
         
-        <div class="card-body">
-          <h5 class="card-title">Job Application</h5>
-          <p class="card-text">Qualification</p>
-          <a href="#" class="btn btn-primary">Browse options</a>
+        <div className="card-body">
+          <h5 className="card-title">Job Application</h5>
+          <p className="card-text">Qualification</p>
+          <a href="#" className="btn btn-primary">Browse options</a>
         </div>
         </div>
       
