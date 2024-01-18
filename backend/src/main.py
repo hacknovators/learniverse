@@ -1,8 +1,9 @@
 from typing import Optional, Annotated
 from fastapi import FastAPI, Depends, Form, UploadFile
-from fastapi.responses import Response
+from fastapi.responses import Response, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, select, Field, Session
+from io import BytesIO
 from .database import engine, db_session
 
 PAGE_SIZE = 20
@@ -31,6 +32,13 @@ class Video(SQLModel, table=True):
 
 
 class Loan(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    desc: str
+    url: str
+
+
+class Job(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     desc: str
@@ -75,6 +83,14 @@ def get_video(id: int, session: Session = Depends(db_session)):
     video = session.exec(statement).one()
     return Response(video.video, media_type="video/ogg")
 
+
+@app.get("/svideo/{id}")
+def get_streamed_video(id: int, session: Session = Depends(db_session)):
+    statement = select(Video).where(Video.id == id)
+    video = session.exec(statement).one()
+    return StreamingResponse(BytesIO(video.video))
+
+
 @app.get("/thumbnail/{id}")
 def get_thumbnail(id: int, session: Session = Depends(db_session)):
     statement = select(Video.thumbnail).where(Video.id == id)
@@ -97,3 +113,18 @@ def list_loans(page: int = 0, session: Session = Depends(db_session)):
     res = session.exec(statement).all()
     return res
 
+
+@app.post("/job")
+def add_job(name: str, desc: str, url: str, session: Session = Depends(db_session)):
+    job = Job(name=name, desc=desc, url=url)
+    session.add(job)
+    session.commit()
+    session.refresh(job)
+    return {"id": job.id}
+
+
+@app.get("/job")
+def list_jobs(page: int = 0, session: Session = Depends(db_session)):
+    statement = select(Job).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
+    res = session.exec(statement).all()
+    return res
