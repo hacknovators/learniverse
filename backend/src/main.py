@@ -1,5 +1,6 @@
 from typing import Optional, Annotated
 from fastapi import FastAPI, Depends, Form, UploadFile
+from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, select, Field, Session
 from .database import engine, db_session
@@ -25,6 +26,7 @@ class Video(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     desc: str
+    thumbnail: bytes
     video: bytes
 
 
@@ -44,10 +46,16 @@ def startup():
 async def add_video(
     name: Annotated[str, Form()],
     desc: Annotated[str, Form()],
+    thumbnail: UploadFile,
     video: UploadFile,
     session: Session = Depends(db_session),
 ):
-    vid = Video(name=name, desc=desc, video=await video.read())
+    vid = Video(
+        name=name,
+        desc=desc,
+        thumbnail=await thumbnail.read(),
+        video=await video.read()
+    )
     session.add(vid)
     session.commit()
     session.refresh(vid)
@@ -66,6 +74,12 @@ def get_video(id: int, session: Session = Depends(db_session)):
     statement = select(Video).where(Video.id == id)
     video = session.exec(statement).one()
     return {"data": str(video.video)}
+
+@app.get("/thumbnail/{id}")
+def get_thumbnail(id: int, session: Session = Depends(db_session)):
+    statement = select(Video.thumbnail).where(Video.id == id)
+    thumbnail = session.exec(statement).one();
+    return Response(thumbnail, media_type="image/png")
 
 
 @app.post("/loan")
