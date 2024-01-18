@@ -3,11 +3,14 @@ import { useEffect } from 'react'
 export default function VideoCard({id, name, setVideo, setPage}) {
     function gotoVideo() {
         setVideo(id)
-        setPage("video")
+        setPage(true)
     }
     
     useEffect(() => {
-        document.getElementsByClassName("card-img-top")[0].src = "http://localhost:8000/thumbnail/" + id
+        // id-1 is technically very unsafe
+        document.getElementsByClassName("card-img-top")[id-1].src = "http://localhost:8000/thumbnail/" + id
+
+        console.log(document.getElementsByClassName("card-img-top")[0].src)
     }, [])
     
     return <>

@@ -2,31 +2,30 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import MainPage from './MainPage.jsx';
 import Header from './Header.jsx';
-import Object from './Object.jsx';
+// import Object from './Object.jsx';
 import Video from './Video.jsx'
 
 function App() {
   let [video, setVideo] = useState("")
-  let [page, setPage] = useState("")
+  let [videoPage, setVideoPage] = useState(false)
+  let [jobPage, setJobPage] = useState(false)
+  let [loanPage, setLoanPage] = useState(false)
   
   let content;
 
   // useEffect(() => {
-    if (page == "video")
-      content = <Video id={video} />
+    if (videoPage)
+      content = <Video id={video} setVideo={setVideo} setVideoPage={setVideoPage} />
     else
-      content = <>
-        <Object /> 
-        <MainPage setVideo={setVideo} setPage={setPage} />
-      </>
+      content = <MainPage setVideo={setVideo} setPage={setVideoPage} />
 
     
-    // console.log(content)
-  // }, [page, video])
+    // console.log(page, content)
+  // }, [])
 
   return (
     <>
-      <Header />
+      <Header setJobPage={setJobPage} setLoanPage={setLoanPage}/>
       {content}
       
     </>
