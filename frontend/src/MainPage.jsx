@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import VideoCard from './VideoCard.jsx';
 
-export default function MainPage() {
+export default function MainPage({setVideo, setPage}) {
     let [list, setList] = useState([])
 
     useEffect(() => {
@@ -14,6 +14,6 @@ export default function MainPage() {
     }, [])
 
     return <>
-        {(list || []).map((data) => <VideoCard id={data.id} name={data.name} /> )}
+        {(list || []).map((data) => <VideoCard id={data.id} name={data.name} setVideo={setVideo} setPage={setPage} /> )}
     </>
 }

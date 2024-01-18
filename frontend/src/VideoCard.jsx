@@ -1,9 +1,13 @@
 import { useEffect } from 'react'
 
-export default function VideoCard({id, name}) {
+export default function VideoCard({id, name, setVideo, setPage}) {
+    function gotoVideo() {
+        setVideo(id)
+        setPage("video")
+    }
+    
     useEffect(() => {
         document.getElementsByClassName("card-img-top")[0].src = "http://localhost:8000/thumbnail/" + id
-
     }, [])
     
     return <>
@@ -12,7 +16,7 @@ export default function VideoCard({id, name}) {
         <div className="card-body">
             <h5 className="card-title">{name}</h5>
             {/* <p className="card-text">{desc}</p> */}
-            <a href="#" className="btn btn-primary">Watch video</a>
+            <a onClick={gotoVideo} className="btn btn-primary">Watch video</a>
         </div>
     </div>
     </>
