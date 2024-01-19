@@ -7,13 +7,12 @@ export default function MainPage({setVideo, setPage}) {
     useEffect(() => {
         fetch("/api/video", {mode: 'cors'})
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
+            .then((data) => {   
                 setList(data)
             })
     }, [])
 
     return <>
-        {(list || []).map((data) => <VideoCard id={data.id} name={data.name} setVideo={setVideo} setPage={setPage} /> )}
+        {(list || []).map((data) => <VideoCard key={data.id} id={data.id} name={data.name} desc={data.desc} setVideo={setVideo} setPage={setPage} /> )}
     </>
 }
