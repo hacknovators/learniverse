@@ -54,6 +54,11 @@ class Scholarship(SQLModel, table=True):
     url: str
 
 
+class ChatMessage(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    msg: str
+    mentor: bool
+
 
 @app.on_event("startup")
 def startup():
@@ -81,8 +86,8 @@ async def add_video(
 
 
 @app.get("/video")
-def list_videos(page: int = 0, session: Session = Depends(db_session)):
-    statement = select(Video.id, Video.name, Video.desc).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
+def list_videos(page: int = 0, std: str = None, sub: str = None, session: Session = Depends(db_session)):
+    statement = select(Video.id, Video.name, Video.desc).where(Video.std == std).where((Video.sub == sub) if sub != "" else True).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
     res = session.exec(statement).all()
     return [{"id": i.id, "name": i.name, "desc": i.desc} for i in res]
 
@@ -152,5 +157,21 @@ def add_scholarship(name: str, desc: str, url: str, session: Session = Depends(d
 @app.get("/scholarship")
 def list_scholarship(page: int = 0, session: Session = Depends(db_session)):
     statement = select(Scholarship).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
+    res = session.exec(statement).all()
+    return res
+
+
+@app.post("/chat")
+def add_chat(msg: str, mentor: bool, session: Session = Depends(db_session)):
+    chat = ChatMessage(msg=msg, mentor=mentor)
+    session.add(chat)
+    session.commit()
+    session.refresh(chat)
+    return {"id": chat.id}
+
+
+@app.get("/chat")
+def list_chat(page: int = 0, session: Session = Depends(db_session)):
+    statement = select(ChatMessage).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
     res = session.exec(statement).all()
     return res
