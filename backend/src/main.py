@@ -27,6 +27,8 @@ class Video(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     desc: str
+    std: int
+    sub: str
     thumbnail: bytes
     video: bytes
 
@@ -43,6 +45,14 @@ class Job(SQLModel, table=True):
     name: str
     desc: str
     url: str
+
+
+class Scholarship(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    desc: str
+    url: str
+
 
 
 @app.on_event("startup")
@@ -72,9 +82,9 @@ async def add_video(
 
 @app.get("/video")
 def list_videos(page: int = 0, session: Session = Depends(db_session)):
-    statement = select(Video.id, Video.name).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
+    statement = select(Video.id, Video.name, Video.desc).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
     res = session.exec(statement).all()
-    return [{"id": i.id, "name": i.name} for i in res]
+    return [{"id": i.id, "name": i.name, "desc": i.desc} for i in res]
 
 
 @app.get("/video/{id}")
@@ -126,5 +136,21 @@ def add_job(name: str, desc: str, url: str, session: Session = Depends(db_sessio
 @app.get("/job")
 def list_jobs(page: int = 0, session: Session = Depends(db_session)):
     statement = select(Job).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
+    res = session.exec(statement).all()
+    return res
+
+
+@app.post("/scholarship")
+def add_scholarship(name: str, desc: str, url: str, session: Session = Depends(db_session)):
+    scholarship = Scholarship(name=name, desc=desc, url=url)
+    session.add(scholarship)
+    session.commit()
+    session.refresh(scholarship)
+    return {"id": scholarship.id}
+
+
+@app.get("/scholarship")
+def list_scholarship(page: int = 0, session: Session = Depends(db_session)):
+    statement = select(Scholarship).offset(PAGE_SIZE * page).limit(PAGE_SIZE)
     res = session.exec(statement).all()
     return res
