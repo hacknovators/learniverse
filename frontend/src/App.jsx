@@ -3,7 +3,8 @@ import './App.css'
 import MainPage from './MainPage.jsx';
 import Header from './Header.jsx';
 // import Object from './Object.jsx';
-import Video from './Video.jsx'
+import Video from './Video.jsx';
+import InfoPage from './InfoPage.jsx';
 
 function App() {
   let [video, setVideo] = useState("")
@@ -16,9 +17,12 @@ function App() {
   // useEffect(() => {
     if (videoPage)
       content = <Video id={video} setVideo={setVideo} setVideoPage={setVideoPage} />
+    else if (jobPage)
+      content = <InfoPage setPage={setJobPage} work="job" />
+    else if (loanPage)
+      content = <InfoPage setPage={setLoanPage} work="loan" />
     else
       content = <MainPage setVideo={setVideo} setPage={setVideoPage} />
-
     
     // console.log(page, content)
   // }, [])
