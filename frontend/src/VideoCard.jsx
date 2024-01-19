@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 export default function VideoCard({id, name, setVideo, setPage}) {
     function gotoVideo() {
         setVideo(id)
-        setPage(true)
+        setPage("video")
     }
     
     useEffect(() => {

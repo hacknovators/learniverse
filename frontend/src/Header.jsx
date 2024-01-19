@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
-function Header({setJobPage, setLoanPage}) {
+function Header({setPage}) {
 return (
 
 <div className="card text-center">
   <div className="card-body">
-    <a onClick={() => setJobPage(false) || setLoanPage(false)} className="btn btn-primary">Home</a>
-    <a onClick={() => setJobPage(true)} className="btn btn-primary">Job Applications</a>
-    <a onClick={() => setLoanPage(true)} className="btn btn-primary">Loan and Grants</a>
+    <a onClick={() => setPage("")} className="btn btn-primary">Home</a>
+    <a onClick={() => setPage("job")} className="btn btn-primary">Job Applications</a>
+    <a onClick={() => setPage("loan")} className="btn btn-primary">Loan and Grants</a>
   </div>
 </div>
     

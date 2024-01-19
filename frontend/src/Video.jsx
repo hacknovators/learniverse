@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-export default function Video({id, setVideo, setVideoPage}) {
+export default function Video({id, setVideo, setPage}) {
     function goBack() {
         setVideo("")
-        setVideoPage(false)
+        setPage("")
     }
     
     useEffect(() => {
