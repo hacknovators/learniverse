@@ -71,13 +71,17 @@ async def add_video(
     desc: Annotated[str, Form()],
     thumbnail: UploadFile,
     video: UploadFile,
+    std: Annotated[int, Form()],
+    sub: Annotated[str, Form()],
     session: Session = Depends(db_session),
 ):
     vid = Video(
         name=name,
         desc=desc,
         thumbnail=await thumbnail.read(),
-        video=await video.read()
+        video=await video.read(),
+        std=std,
+        sub=sub,
     )
     session.add(vid)
     session.commit()
