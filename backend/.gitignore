@@ -2,3 +2,4 @@ venv/
 *.pyd
 *.pyc
 *.db
+.vercel

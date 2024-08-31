@@ -1,0 +1,4 @@
+- Make the exact vercel.json file
+- Must have requirements.txt
+- Python version 3.9
+- Set node version in settings to 18
