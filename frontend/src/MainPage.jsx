@@ -6,8 +6,10 @@ export default function MainPage({setVideo, setPage}) {
     let [std, setStd] = useState(0)
     let [sub, setSub] = useState("")
 
+    const host = import.meta.env.VITE_APP_HOST || "";
+
     useEffect(() => {
-        fetch("/api/video?" + new URLSearchParams({
+        fetch(`${host}/video?` + new URLSearchParams({
             sub: sub,
             std: std,
         }), {

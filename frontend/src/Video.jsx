@@ -6,9 +6,11 @@ export default function Video({id, desc, setVideo, setPage}) {
         setVideo([])
         setPage("")
     }
+
+    const host = import.meta.env.VITE_APP_HOST || "";
     
     useEffect(() => {
-        document.getElementById("video-src").src = "http://localhost:8000/svideo/" + id
+        document.getElementById("video-src").src = `${host}/svideo/${id}`
     }, [])
 
     return <>

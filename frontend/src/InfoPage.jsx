@@ -4,8 +4,10 @@ import InfoCard from './InfoCard.jsx';
 export default function InfoPage({setPage ,work}) {
     let [data, setData] = useState([])
 
+    const host = import.meta.env.VITE_APP_HOST || "";
+
     useEffect(() => {
-        fetch('/api/' + work )
+        fetch(`${host}/${work}`)
             .then((response) => response.json())
             .then((json) => setData(json))
     }, [""])

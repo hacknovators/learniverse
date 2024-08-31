@@ -6,10 +6,12 @@ export default function VideoCard({id, name, desc, setVideo, setPage}) {
         setVideo([id, desc])
         setPage("video")
     }
+
+    const host = import.meta.env.VITE_APP_HOST || "";
     
     useEffect(() => {
         const cards = document.getElementsByName("thumb-" + id)
-        cards[0].src = "http://localhost:8000/thumbnail/" + id
+        cards[0].src = `${host}/thumbnail/${id}`
 
         console.log(document.getElementsByClassName("card-img-top")[0].src)
     }, [])

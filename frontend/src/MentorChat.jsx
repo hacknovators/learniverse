@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 export default function MentorChat({self, setPage}) {
     let [content, setContent] = useState([])
 
+    const host = import.meta.env.VITE_APP_HOST || "";
+
     function sendMessage() {
         const msg = document.getElementById("inlineFormInputName").value
-        fetch('/api/chat?' + new URLSearchParams({
+        fetch(`${host}/chat?` + new URLSearchParams({
             msg: msg,
             mentor: self
         }), {
@@ -16,7 +18,7 @@ export default function MentorChat({self, setPage}) {
     }
 
     useEffect(() => {
-        fetch("/api/chat")
+        fetch(`${host}/api/chat`)
             .then((response) => response.json())
             .then((json) => setContent(json))
     }, [])
